@@ -1,0 +1,150 @@
+
+================================================================================
+
+	Variables.
+
+================================================================================
+
+
+
+A variable is a name for some data that’s stored in memory at some address.
+
+
+
+================================================================================
+
+	Pointers.
+
+================================================================================
+
+
+
+	A pointer is a variable that holds an address.
+
+int a = 10;
+int *b = &a;
+int **c = &b;
+int ***d = &c;
+
+
+
+	Pointer arithmetic.
+
+        In short, if you have a pointer to a type,
+        adding one to the pointer moves to the next item
+        of that type directly after it in memory.
+
+It’s important to remember that as we move pointers around
+and look at different places in memory,
+we need to make sure that we’re always pointing
+to a valid place in memory before we dereference.
+If we’re off in the weeds and we try to see what’s there,
+the behavior is undefined and a crash is a common result.
+
+int a[5] = {11, 22, 33, 44, 55};
+int *p = &a[0];                         // Or "int *p = a;" works just as well
+
+printf("%d\n", *p);                     // Prints 11
+printf("%d\n", *(p + 1));               // Prints 22!!
+
+        C knows that p is a pointer to an int.
+        So it knows the sizeof an int
+        and it knows to skip that many bytes
+        to get to the next int after the first one!
+
+for (int i = 0; i < 5; i++) {
+        printf("%d\n", *(p + i));       // Same as p[i].
+}
+
+
+
+	Const pointers.
+
+int x[] = {10, 20};
+const int *p = x;
+p++;					// We can modify p, no problem.
+*p = 30;				// Compiler error! Can't change
+					   what it points to.
+
+
+
+const int *p;				// Can't modify what p points to.
+int const *p;				// Can't modify what p points to,
+					   just like the previous line.
+
+int *const p;				// We can't modify "p"
+					   with pointer arithmetic.
+
+const int *const p;			// Can't modify p or *p!
+
+
+
+char **p;
+p++;					// OK!
+(*p)++;					// OK!
+
+char **const p;
+p++;					// Error!
+(*p)++;					// OK!
+
+char *const *p;
+p++;					// OK!
+(*p)++;					// Error!
+
+char *const *const p;
+p++;					// Error!
+(*p)++;					// Error!
+
+
+
+	Why int *i
+	instead of int * i
+	or int* i.
+
+int a;					// Longer version.
+int b;
+
+int a, b;				// Shortened.
+
+	How would you solve:
+int a;
+int *b;
+
+	Thats why we write pointer before variable name:
+int a, *b;				// Same thing.
+int *a, b;				// a is a pointer to an int.
+					   b is just an int.
+
+	And this can be confusing:
+int* a, b;				// a is a pointer to an int.
+					   b is just an int.
+
+
+
+================================================================================
+
+	Booleans.
+
+================================================================================
+
+
+
+	In C, 0 means “false”, and non-zero means “true”.
+	So 1 is true. And -37 is true. And 0 is false.
+
+
+
+// Syntactic sugar for bools.
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+	bool x = true;
+	if (x) {
+		printf("x is true!\n");
+	}
+}
+
+
+
+================================================================================

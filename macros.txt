@@ -1,0 +1,62 @@
+================================================================================
+
+	What this word even mean?
+
+================================================================================
+
+
+
+In computer programming, a macro
+(short for "macro instruction"; from Greek μακρο- 'long, large')
+is a rule or pattern that specifies how a certain input should be mapped
+to a replacement output.
+
+	Macro = large instruction mapped to
+	or executed after certain input.
+
+
+
+================================================================================
+
+	Prevent multiple includes.
+
+================================================================================
+
+
+
+#ifndef BAR_H           // If BAR_H isn't defined...
+#define BAR_H           // Define it (with no particular value).
+			// Conventional name for file bar.h.
+
+int add(int, int);	// Macro instruction body.
+
+#endif                  // End of the #ifndef BAR_H.
+
+
+
+================================================================================
+
+	General macros syntax.
+
+====================================================================================
+
+
+
+#define MY_INT 10
+#undef
+
+#if
+#endif
+
+#else
+#elif
+
+#ifdef FOO
+#if defined FOO
+
+#ifndef FOO
+#if !defined FOO
+
+
+
+================================================================================

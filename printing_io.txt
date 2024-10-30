@@ -1,0 +1,287 @@
+
+================================================================================
+
+	Print specifiers.
+
+================================================================================
+
+
+
+%d: Signed decimal integer.
+%u: Unsigned decimal integer.
+
+%c: Character.
+%s: String of characters.
+
+%p: Pointer address.
+
+%f: Decimal floating - point number.
+%e: Scientific notation floating - point number.
+%g: Use the shorter of %f or %e.
+
+%x: Unsigned hexadecimal integer.
+%a: Hexadecimal floating - point number.
+%o: Unsigned octal integer.
+
+// %zu is the format specifier for type size_t.
+// If you need to print out negative size_t values, use %zd.
+
+	sizeof()
+	It’s the size in bytes of the type of the expression,
+	not the size of the expression itself.
+	sizeof is a compile-time operation.
+
+int *p;
+printf("%zu\n", sizeof(int));	// Prints size of an 'int'.
+printf("%zu\n", sizeof p);	// p is type 'int *', so prints size of 'int*'.
+printf("%zu\n", sizeof *p);	// *p is type 'int', so prints size of 'int'.
+
+
+
+================================================================================
+
+	IO. scanf().
+
+================================================================================
+
+
+
+	Limit scanf() to prevent overflow.
+
+char c[10];             	// Allocate a buffer of 10 characters. Allocated at stack.
+scanf("%9s", c);        	// Limit input to 9 characters to avoid buffer overflow.
+printf("\n %s \n", c);
+
+
+
+================================================================================
+
+	Printing and scanning wide characters.
+
+================================================================================
+
+
+
+To handle extended characters correctly in C,
+it's recommended to use the wchar_t type,
+which is designed to hold wide characters,
+and the wprintf and wscanf functions,
+which are designed to handle wide characters.
+Additionally, you should set the locale to a Unicode-compatible locale
+using the setlocale function.
+
+
+
+================================================================================
+
+	Character ranges.
+
+================================================================================
+
+
+
+If char is signed (which is the default on most platforms),
+values above 127 will be represented as negative numbers,
+and the behavior is implementation-defined.
+This means that the compiler can choose how to interpret these values,
+and it may vary between platforms.
+
+If char is unsigned (which can be specified using the unsigned keyword),
+values above 127 will be represented as positive numbers, and the behavior is well-defined.
+
+
+
+================================================================================
+
+	Interacting with environment.
+
+================================================================================
+
+
+
+Collecting cli arguments(flags) in your main().
+
+int main(int argc, char *argv[]) {
+
+	for (int i = 0; i < argc; i++) {
+		printf("arg %d: %s\n", i, argv[i]);
+	}
+}
+
+	int argc is ARGUMENT COUNT. Array length of flags.
+
+The Last argv is NULL.
+argv[argc] == NULL	// Always true.
+
+	Those are same:
+int main(int argc, char *argv[])
+int main(int argc, char **argv)
+
+
+================================================================================
+
+        FILE* data type.
+
+================================================================================
+
+
+When we do any kind of I/O in C,
+we do so through a piece of data that you get in the form of a FILE* type.
+This FILE* holds all the information
+needed to communicate with the I/O subsystem about which file you
+have open, where you are in the file, and so on.
+
+Those are also called streams.
+
+        Three streams that are already open for you and ready for use.
+
+FILE* name                      Description
+
+stdin                           Standard Input, generally the keyboard by default
+stdout                          Standard Output, generally the screen by default
+stderr                          Standard Error, generally the screen by default, as well
+
+printf("Hello, world!\n");              // Same as printing to a file.
+fprintf(stdout, "Hello, world!\n");     // printf to a file.
+
+
+
+================================================================================
+
+        Reading text files.
+
+================================================================================
+
+
+
+Streams are largely categorized two different ways: text and binary.
+Text files are logically a sequence of lines separated by newlines. To be
+portable, your input data should always end with a newline.
+
+But the general rule is that if you’re able to edit
+the file in a regular text editor, it’s a text file.
+Otherwise, it’s binary.
+
+int main(void)
+{
+        FILE *fp;                               // Variable to represent open file
+        fp = fopen("hello.txt", "r");           // Open file for reading
+        int c = fgetc(fp);                      // Read a single character
+        printf("%c\n", c);                      // Print char to stdout
+        fclose(fp);                             // Close the file when done
+}
+
+fopen()         // Will return NULL if something goes wrong.
+
+We close the stream when we’re done with it.
+All streams are automatically closed when the program
+exits, but it’s good form and good housekeeping to explicitly
+close any files yourself when done with them.
+
+The FILE* keeps track of our position in the file.
+So subsequent calls to fgetc() would get the next character
+in the file, and then the next, until the end.
+
+
+
+================================================================================
+
+        End of File EOF.
+
+================================================================================
+
+
+
+There is a special character defined as a macro: EOF.
+This is what fgetc() will return when the end of the
+file has been reached and you’ve attempted to read another character.
+
+EOF is the reason why fgetc() and functions like it
+return an int instead of a char.
+EOF isn’t a character proper, and its value likely falls outside the range of
+char. Since fgetc() needs to be able to return any byte and EOF,
+it needs to be a wider type that can hold more values.
+So int it is. But unless you’re comparing the returned value against EOF,
+you can know, deep down, it’s a char.
+
+
+
+================================================================================
+
+        Reading a line at a time.
+
+================================================================================
+
+
+
+So how can we get an entire line at once?
+fgets() to the rescue! For arguments,
+it takes a pointer to a char buffer to hold bytes,
+a maximum number of bytes to read,
+and a FILE* to read from.
+It returns NULL on end-of-file or error.
+fgets() is even nice enough to NUL-terminate the string when its done.
+
+If the buffer’s not big enough to read in an entire line,
+it’ll just stop reading mid-line,
+and the next call to fgets() will continue
+reading the rest of the line.
+
+int main(void)
+{
+        FILE *fp;
+        char s[1024];           // Big enough for any line this program will encounter
+        int linecount = 0;
+        fp = fopen("quote.txt", "r");
+
+        while (fgets(s, sizeof s, fp) != NULL)
+                printf("%d: %s", ++linecount, s);
+
+        fclose(fp);
+}
+
+
+
+================================================================================
+
+        Formatted input.
+
+================================================================================
+
+
+whales.txt
+
+blue 29.9 173
+right 20.7 135
+gray 14.9 41
+humpback 16.0 30
+
+        We could read these with fgets()
+        and then parse the string with sscanf()
+        (and in some ways that’s more resilient against corrupted files),
+        but in this case, let’s just use fscanf() and pull it in directly.
+
+The fscanf() function skips leading whitespace when reading,
+and returns EOF on end-of-file or error.
+
+FILE *fp;
+char name[1024];        // Big enough for any line this program will encounter
+float length;
+int mass;
+
+fp = fopen("whales.txt", "r");
+
+while (fscanf(fp, "%s %f %d", name, &length, &mass) != EOF)
+        printf("%s whale, %d tones, %.1f meters\n", name, mass, length);
+
+fclose(fp);
+
+
+
+================================================================================
+
+        Writing text files.
+
+================================================================================
+
+        ...

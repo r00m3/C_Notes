@@ -1,0 +1,119 @@
+
+====================================================================================================
+
+	Types.
+
+====================================================================================================
+
+
+
+int i;			// Signed integer.
+signed int i; 		// Signed integer.
+signed i; 		// Signed, "shorthand" for "int" or "signed int", rare.
+
+unsigned int i; 	// Unsigned integer.
+unsigned i; 		// Unsigned, shorthand for "unsigned int".
+
+char c; 		// Could be signed or unsigned.
+signed char c; 		// Definitely signed.
+unsigned char c;	// Definitely unsigned.
+
+short int i;
+short i;
+
+unsigned short int i;
+unsigned short i;
+
+long int i;
+long i;
+
+unsigned long int i;
+unsigned long i;
+
+long long int i;
+long long i;
+
+unsigned long long int i;
+unsigned long long i;
+
+
+
+====================================================================================================
+
+	Ranges. On 64bit system.
+
+====================================================================================================
+
+
+
+int i;
+[ int32_t ]
+		INT_MIN: -2_147_483_648
+		INT_MAX: 2_147_483_647
+
+unsigned int i;
+[ uint32_t ]
+		0
+		UINT_MAX: 4_294_967_295
+
+short i;
+[ int16_t ]
+		SHRT_MIN: -32_768
+		SHRT_MAX: 32_767
+
+unsigned short i;
+[ uint16_t ]
+		0
+		USHRT_MAX: 65_535
+
+long int i;
+[ int64_t ]
+		LONG_MIN: -9_223_372_036_854_775_808
+		LONG_MAX: 9_223_372_036_854_775_807
+
+unsigned long i;
+[ uint64_t ]
+		0
+		ULONG_MAX: 18_446_744_073_709_551_615
+
+long long int i;
+[ int64_t ]
+		LLONG_MIN: -9_223_372_036_854_775_808
+		LLONG_MAX: 9_223_372_036_854_775_807
+
+unsigned long long i;
+[ uint64_t ]
+		0
+		ULLONG_MAX: 18_446_744_073_709_551_615
+
+char c;
+[ int8_t ]
+		CHAR_MIN: -128
+		CHAR_MAX: 127
+
+signed char c;
+[ int8_t ]
+		SCHAR_MIN: -128
+		SCHAR_MAX: 127
+
+unsigned char c;
+[ uint8_t ]
+		0
+		UCHAR_MAX: 255
+
+
+
+							These typedefs are in stdint.h
+	
+							int8_t
+							int16_t
+							int32_t
+							int64_t
+							uint8_t
+							uint16_t
+							uint32_t
+							uint64_t
+
+
+
+====================================================================================================
